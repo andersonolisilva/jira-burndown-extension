@@ -1,0 +1,18 @@
+{
+  "manifest_version": 2,
+  "name": "Jira Sprint Burndown Extension",
+  "description": "This extension allows the user to generate a Burndown chart from a Spring Board based in tasks.",
+  "version": "1.0",
+  "author": "Mult-e Engenharia Digital",
+  "browser_action": {
+    "default_icon": "icon.png",
+    "default_popup": "main.html"
+  },
+  "permissions": [
+    "activeTab",
+    "storage",
+	  "http://*/",
+  	"https://*/"
+  ],
+  "content_security_policy": "script-src 'self' https://ajax.googleapis.com https://code.highcharts.com https://maxcdn.bootstrapcdn.com/; object-src 'self'"
+}
