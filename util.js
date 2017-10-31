@@ -198,6 +198,5 @@ function isAnWorkingDay(currentDate, nonWorkingDays)
 
 function showMsg(msg)
 {
-	console.log(msg);
-	$(container).html(msg);
+	$(chartContainer).html(msg);
 }

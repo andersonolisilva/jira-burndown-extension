@@ -1,36 +1,37 @@
 var jiraHost = 'https://jiramult-e.atlassian.net';
-var boardId = 28; // Board GCF
 var effortField = 'customfield_10033';
 var boardMenu = '#board-menu';
-var container = '#container';
+var chartContainer = '#chart-container';
 var sprint = null;
 
 $(document).ready(function(){
-
-	//listJiraBoards();
-
-	
-	queryJiraInfo(boardId, function(){
-		showMsg('Generating burndown chart...');
-		generateBurndownChart();
-	});
-	
-	
+	listJiraBoards();	
 });
 
 function listJiraBoards()
 {
+	showMsg('Fetching Scrum Boards...');
 	$.ajax({
 		
-		url: jiraHost + '/rest/agile/latest/board?maxResults=100'
+    url: jiraHost + '/rest/agile/1.0/board?type=scrum'
 		
 	}).then(function(data){
-		
-		data.values.forEach(function(board)
+    
+    var boards = data.values.sort(function(boardA,boardB){
+      return boardA.id - boardB.id;
+    });
+
+		boards.forEach(function(board)
 		{
-			console.log(board);
-			$(boardMenu).append('<a href="#" class="list-group-item">' + board.id + ': ' + board.name + '</a>');
-		});
+			$(boardMenu).append('<a href="#" id="' + board.id + '" class="list-group-item">' + board.id + ': ' + board.name + '</a>');
+    });
+    
+    $(boardMenu + " a").click(function(){
+      $(boardMenu).hide();
+      queryJiraInfo($(this)[0].id, function(){
+        generateBurndownChart();
+      });
+    });    
 		
 	});
 }
@@ -64,10 +65,14 @@ function queryJiraInfo(boardId, fn)
 
 function generateBurndownChart()
 {
-   $(container).highcharts({
+  showMsg('Generating burndown chart...');
+  $(chartContainer).highcharts({
       title: {
          text: sprint.name,
          x: -10
+      },
+      chart: {
+        height: '70%'
       },
       exporting: {
         enabled: false
@@ -99,9 +104,9 @@ function generateBurndownChart()
       },
       xAxis: {
          categories: sprint.dateRange(),
-		 labels: {
-			 rotation: -45
-		 }
+        labels: {
+          rotation: -45
+        }
       },
       yAxis: {
          title: {
@@ -134,4 +139,8 @@ function generateBurndownChart()
          data: sprint.remainingEffort()
       }]
    });	
+   $(chartContainer).append('<a href="#">Boards List</a>').click(function () {
+     $(chartContainer).empty();
+     $(boardMenu).show();
+   });;
 }
