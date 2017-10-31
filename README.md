@@ -1,3 +1,3 @@
 # jira-burndown-extension
 
-Still under development.
+Under development.
