@@ -1,7 +1,11 @@
+// Plugin Parameters (They need to be moved to a config screen)
 var jiraHost = 'https://jiramult-e.atlassian.net';
 var effortField = 'customfield_10033';
 var boardMenu = '#board-menu';
 var chartContainer = '#chart-container';
+var finishedStatus = ['FINISHED', 'CLOSED'];
+
+// Main
 var sprint = null;
 
 $(document).ready(function(){
@@ -18,12 +22,16 @@ function listJiraBoards()
 	}).then(function(data){
     
     var boards = data.values.sort(function(boardA,boardB){
-      return boardA.id - boardB.id;
+      if (boardA.location.name.toUpperCase() < boardB.location.name.toUpperCase())
+        return -1;
+      if (boardA.location.name.toUpperCase() > boardB.location.name.toUpperCase())
+        return 1;
+      return 0;
     });
 
 		boards.forEach(function(board)
 		{
-			$(boardMenu).append('<a href="#" id="' + board.id + '" class="list-group-item">' + board.id + ': ' + board.name + '</a>');
+      $(boardMenu).append('<a href="#" id="' + board.id + '" class="list-group-item">' + board.location.name + ': ' + board.name + '</a>');
     });
     
     $(boardMenu + " a").click(function(){

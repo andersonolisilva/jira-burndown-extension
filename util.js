@@ -48,14 +48,14 @@ function Sprint(id, name, startDate, endDate)
 	this.setIssues = function(issues)
 	{
 		this.issues = issues;
-		
-		var finishedIssues = this.issues.filter(function(issue){return issue.fields.status.name == 'Finished';});
+
+		var finishedIssues = this.issues.filter(function(issue){return isIssueFinished(issue);});
 		
 		finishedIssues.forEach(function(issue){
 			for(var i = issue.changelog.histories.length-1; i >= 0; i--)
 			{
 				var history = issue.changelog.histories[i];
-				if(history.items[0].toString == "Finished")
+				if(isIssueFinished(null,history))
 					issue.finishedOn = history.created;
 			}
 		});
@@ -107,7 +107,7 @@ function Sprint(id, name, startDate, endDate)
 	{
 		var realizedEffort = new Array();
 		
-		var finishedIssues = this.issues.filter(function(issue){return issue.fields.status.name == 'Finished';});
+		var finishedIssues = this.issues.filter(function(issue){return isIssueFinished(issue);});
 		
 		if(finishedIssues.length > 0)
 		{
@@ -194,6 +194,13 @@ function isAnWorkingDay(currentDate, nonWorkingDays)
 	}
 	
 	return true;
+}
+
+// Checks if the issue (or its specific history) is finished
+function isIssueFinished(issue, history)
+{
+	var status = (issue != null ? issue.fields.status.name : history.items[0].toString + '');
+	return $.inArray(status.toUpperCase(), finishedStatus) > -1;
 }
 
 function showMsg(msg)
