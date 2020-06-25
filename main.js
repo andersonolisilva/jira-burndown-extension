@@ -1,9 +1,9 @@
 // Plugin Parameters (They need to be moved to a config screen)
-var jiraHost = 'https://jiramult-e.atlassian.net';
-var effortField = 'customfield_10033';
+var jiraHost = 'https://evolux.atlassian.net/';
+var effortField = 'customfield_10005';
 var boardMenu = '#board-menu';
 var chartContainer = '#chart-container';
-var finishedStatus = ['FINISHED', 'CLOSED'];
+var finishedStatus = ['FINISHED', 'CLOSED', 'DONE'];
 
 // Main
 var sprint = null;

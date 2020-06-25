@@ -82,7 +82,10 @@ function Sprint(id, name, startDate, endDate)
 	{
 		var points = 0;	
 		this.issues.forEach(function(issue){
-			points += issue.fields[effortField];
+			let pointActual = issue.fields[effortField];
+			if (typeof(pointActual) != 'undefined' && pointActual != null){
+				points += issue.fields[effortField];
+			}
 		});
 		return points;
 	};
@@ -126,7 +129,10 @@ function Sprint(id, name, startDate, endDate)
 					sortedIssues.forEach(function(issue){
 						if(buildDate(issue.finishedOn).getUTCDate() == currentDate)
 						{
-							performedInDay += issue.fields[effortField];
+							performedInDayTmp = issue.fields[effortField]
+							if (performedInDayTmp != 'undefined' && performedInDayTmp != null){
+							   performedInDay += issue.fields[effortField];
+							} 
 						}
 					});
 					estimatedPoints = estimatedPoints - performedInDay;
