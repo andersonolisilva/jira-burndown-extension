@@ -58,7 +58,7 @@ function queryJiraInfo(boardId, fn)
       showMsg('Getting issues data...');
       $.ajax({
         
-        url: jiraHost + '/rest/agile/1.0/board/'+ boardId +'/sprint/'+ sprint.id +'/issue?expand=changelog'
+        url: jiraHost + '/rest/agile/1.0/board/'+ boardId +'/sprint/'+ sprint.id +'/issue?expand=changelog&maxResults=10000'
         
       }).then(function(data){
         
