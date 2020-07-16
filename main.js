@@ -3,7 +3,7 @@ var jiraHost = 'https://evolux.atlassian.net/';
 var effortField = 'customfield_10005';
 var boardMenu = '#board-menu';
 var chartContainer = '#chart-container';
-var finishedStatus = ['FINISHED', 'CLOSED', 'DONE'];
+var finishedStatus = ['FINISHED', 'CLOSED', 'DONE', 'REJECT'];
 
 // Main
 var sprint = null;
@@ -17,7 +17,7 @@ function listJiraBoards()
 	showMsg('Fetching Scrum Boards...');
 	$.ajax({
 		
-    url: jiraHost + '/rest/agile/1.0/board?type=scrum'
+    url: jiraHost + '/rest/agile/1.0/board?type=scrum,simple'
 		
 	}).then(function(data){
     
