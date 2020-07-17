@@ -137,7 +137,7 @@ function generateBurndownChart()
          borderWidth: 0
       },
       series: [{
-          name: 'Expected',
+          name: 'Estimated',
          color: 'rgba(255,0,0,0.25)',
          lineWidth: 2,
          data: sprint.plannedEffort()
