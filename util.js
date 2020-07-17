@@ -95,10 +95,11 @@ function Sprint(id, name, startDate, endDate)
 		var planned = new Array();
 		var effort = this.effort();
 		var diff = effort/(this.dateRange().length-1);
-		var lastValue = -1;
-		for(var i = effort; i > 0; i = i - diff)
+
+		var lastValue = -1.0;
+		for(var i = effort; Math.round(i) > 0; i = i - diff)
 		{
-			lastValue = Math.round(i);
+			lastValue = Math.round(i*100)/100
 			planned.push(lastValue);
 		}
 		if(lastValue > 0)
