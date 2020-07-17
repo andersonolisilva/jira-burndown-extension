@@ -31,7 +31,10 @@ function listJiraBoards()
 
 		boards.forEach(function(board)
 		{
-      $(boardMenu).append('<a href="#" id="' + board.id + '" class="list-group-item">' + board.location.name + ': ' + board.name + '</a>');
+         // TODO: Remover este workaround para exibição apenas do board de produto e produção quando refatorar rotina para cáculo de board agile
+         if (board.id ===76 || board.id ===78){
+            $(boardMenu).append('<a href="#" id="' + board.id + '" class="list-group-item">' + board.location.name + ': ' + board.name + '</a>');
+         }
     });
     
     $(boardMenu + " a").click(function(){
