@@ -107,6 +107,70 @@ function Sprint(id, name, startDate, endDate)
 	};
 	
 	this.remainingEffort = function()
+	{	
+		let realizedEffort = new Array();
+		let totalPointPerSubtask = 0;
+		let totalSubtaskDone = 0;
+		let ticketKey = "";
+		let issuesAll = this.issues;
+		let issuesTaskSprint = this.issues.filter(function(issues){return issues.fields.issuetype.subtask===false});
+		
+		let finishedIssues = new Array();
+		let issuesDateAndPoint = new Array();
+		let subtaskPoint = 0;
+
+		issuesTaskSprint.forEach(function(data){
+			  totalSubtaskDone = 0;
+			  ticketKey = data.key;
+			  totalPointPerSubtask = data.fields[effortField] / data.fields['subtasks'].length;
+			  data.fields.subtasks.forEach(function(data){
+				subtaskKey = data.key;
+				subtaskFinishedOn = getSubTaskFinishedOn(issuesAll,subtaskKey);
+				if( typeof subtaskFinishedOn !== "undefined"){
+					totalSubtaskDone = totalSubtaskDone + 1;
+					subtaskPoint = totalPointPerSubtask * 1;
+					let subtask = new Object();
+					subtask.finishedOn = buildDate(subtaskFinishedOn);
+					subtask.ponto = subtaskPoint;
+					issuesDateAndPoint.push(subtask);	
+				}
+			  });
+		});
+		finishedIssues = sumPointPerDay(issuesDateAndPoint);
+
+		if(finishedIssues.length > 0)
+		{
+			var sortedIssues = finishedIssues.sort(function(a,b){
+				return buildDate(a.finishedOn) - buildDate(b.finishedOn);
+			});
+			
+			var estimatedPoints = this.effort();
+			
+			this.dateRange().forEach(function(dt){
+				dt = buildDate(dt);
+				if(dt <= new Date())
+				{
+					var currentDate = dt.getUTCDate();
+					var performedInDay = 0;		
+					sortedIssues.forEach(function(issue){
+						if(buildDate(issue.finishedOn).getUTCDate() == currentDate)
+						{
+							performedInDayTmp = issue.ponto;
+							if (performedInDayTmp != 'undefined' && performedInDayTmp != null){
+							   performedInDay += issue.ponto;
+							} 
+						}
+					});
+					estimatedPoints = estimatedPoints - performedInDay;
+					realizedEffort.push(estimatedPoints);			
+				}
+			});
+		}
+
+		return realizedEffort;	
+	};
+
+	this._remainingEffort = function()
 	{
 		var realizedEffort = new Array();
 		
@@ -213,3 +277,35 @@ function showMsg(msg)
 {
 	$(chartContainer).html(msg);
 }
+
+function getSubTaskFinishedOn(data, subtask){
+	
+	let subTaskIssuesSprint = data.filter(function(issues){return issues.key===subtask});
+	let subTaskFinishedOn = null;
+	if (subTaskIssuesSprint.length>0){
+		subTaskFinishedOn = subTaskIssuesSprint[0].finishedOn;
+	} 
+	return subTaskFinishedOn
+}
+
+function sumPointPerDay(data) {
+
+	var resultado = [];
+  
+	data.reduce(function(novo, item) {
+	  if (!novo[item.finishedOn]) {
+		novo[item.finishedOn] = {
+		  ponto: 0,
+		  finishedOn: item.finishedOn
+		};
+  
+		resultado.push(novo[item.finishedOn]);
+	  }
+  
+	  novo[item.finishedOn].ponto += item.ponto;
+  
+	  return novo;
+	}, {});
+	
+	return resultado;
+  }
