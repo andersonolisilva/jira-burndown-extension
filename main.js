@@ -14,7 +14,7 @@ $(document).ready(function(){
 });
 
 function listenerPassive(){
-   document.addEventListener('touchstart', handler, {passive: true});
+   document.addEventListener('touchstart', {capture: true});
 }
 
 function listJiraBoards()
