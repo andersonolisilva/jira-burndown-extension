@@ -9,8 +9,13 @@ var finishedStatus = ['FINISHED', 'CLOSED', 'DONE', 'REJECT'];
 var sprint = null;
 
 $(document).ready(function(){
-	listJiraBoards();	
+   listJiraBoards();	
+   //listenerPassive();
 });
+
+function listenerPassive(){
+   document.addEventListener('touchstart', handler, {passive: true});
+}
 
 function listJiraBoards()
 {
@@ -121,7 +126,7 @@ function generateBurndownChart()
       },
       yAxis: {
          title: {
-            text: 'Remaining Work'
+            text: 'Estimated Work'
          },
          type: 'linear'
       },

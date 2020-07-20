@@ -15,3 +15,4 @@ This extension still under development.
 # Additional information
 
 1. For access the data, is necessary previous login in account Atlatian of the Evolux
+2. After instalation, do you need extension pinned for show in the browser

@@ -1,12 +1,16 @@
 {
   "manifest_version": 2,
-  "name": "Jira Sprint Burndown Extension",
+  "name": "Jira Sprint Burndown Extension for Subtask",
   "description": "This extension allows the user to generate a Burndown chart from a Spring Board based in subtasks.",
-  "version": "1.1.0",
-  "author": "Mult-e Engenharia Digital",
+  "version": "1.1.1",
+  "author": "Anderson Silva",
   "browser_action": {
     "default_icon": "icon.png",
     "default_popup": "main.html"
+  },
+  "developer":{
+    "name": "Anderson Silva",
+    "url": "https://andersonolisilva.github.io/"
   },
   "permissions": [
     "activeTab",
