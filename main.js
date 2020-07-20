@@ -10,7 +10,7 @@ var sprint = null;
 
 $(document).ready(function(){
    listJiraBoards();	
-   //listenerPassive();
+   listenerPassive();
 });
 
 function listenerPassive(){
