@@ -1,21 +1,24 @@
 function buildDate(strDate)
 {
 	var date = null;
+	var dateStr = null;
 
 	if(typeof strDate == 'string')
 	{
 		var regEx = /^\d{4}-\d{2}-\d{2}$/;
 		if(strDate.match(regEx))
-			date = new Date(strDate.replace('-', '//'));
+			dateStr = new Date(strDate.replace('-', '//')).toISOString();
 		else
-			date = new Date(strDate);
+			dateStr = new Date(strDate).toISOString();
 	}
 	else
 	{
-		date = new Date(strDate);
+		dateStr = new Date(strDate).toISOString();
 	}
 
+	date = new Date(dateStr);
 	date.setHours(0, 0, 0, 0);
+	
 	return date;
 }
 
@@ -149,7 +152,7 @@ function Sprint(id, name, startDate, endDate)
 			
 			this.dateRange().forEach(function(dt){
 				dt = buildDate(dt);
-				if(dt <= new Date())
+				if(dt <= today())
 				{
 					var currentDate = dt.getUTCDate();
 					var performedInDay = 0;		
@@ -187,7 +190,7 @@ function Sprint(id, name, startDate, endDate)
 			
 			this.dateRange().forEach(function(dt){
 				dt = buildDate(dt);
-				if(dt <= new Date())
+				if(dt <= today())
 				{
 					var currentDate = dt.getUTCDate();
 					var performedInDay = 0;		
@@ -309,4 +312,11 @@ function sumPointPerDay(data) {
 	}, {});
 	
 	return resultado;
+  }
+
+  function today(){
+	let dateStr = new Date().toISOString();
+	let date = new Date(dateStr);
+	date.setHours(0, 0, 0, 0);
+	return date;  
   }

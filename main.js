@@ -59,18 +59,18 @@ function queryJiraInfo(boardId, fn)
       sprint = extractSprintData(data);
       
       showMsg('Getting issues data...');
-      const startTime = performance.now();
+      //const startTime = performance.now();
       $.ajax({
         
         url: jiraHost + '/rest/agile/1.0/board/'+ boardId +'/sprint/'+ sprint.id +'/issue?expand=changelog&maxResults=10000'
       }).then(function(data){
-        const duration1 = performance.now()-startTime;
-        console.log(`Took ${duration1}`)
+        //const duration1 = performance.now()-startTime;
+        //console.log(`Took ${duration1}`)
         // Get all issues except user stories
         //sprint.setIssues(data.issues.filter(function(issue){ return issue.fields.issuetype.description.indexOf('user story') == -1;}));
         sprint.setIssues(data.issues);
-        const duration2 = performance.now()-startTime;
-        console.log(`Took2 ${duration2}`)
+        //const duration2 = performance.now()-startTime;
+        //console.log(`Took2 ${duration2}`)
 
         fn();
       });

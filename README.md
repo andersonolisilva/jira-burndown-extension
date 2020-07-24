@@ -1,7 +1,7 @@
 # jira-burndown-extension
 Version: 0.2
-Author: Marcelo Juventino da Silva
-Last Update: Jan-29-2018
+Author: Anderson Silva
+Last Update: Jul-23-2020
 A Google Chrome extension that generates a Burndown Charts for Jira Projects based on Task effort (Story Points field).
 This extension still under development.
 
