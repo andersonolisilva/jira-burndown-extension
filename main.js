@@ -1,6 +1,8 @@
 // Plugin Parameters (They need to be moved to a config screen)
 var jiraHost = 'https://evolux.atlassian.net/';
-var effortField = 'customfield_10005';
+var effortField = null;
+var effortFieldScrum = 'customfield_10005';
+var effortFieldSimple = 'customfield_10918';
 var boardMenu = '#board-menu';
 var chartContainer = '#chart-container';
 var finishedStatus = ['FINISHED', 'CLOSED', 'DONE', 'REJECT'];
@@ -32,7 +34,8 @@ function listJiraBoards()
 		boards.forEach(function(board)
 		{
          // TODO: Remover este workaround para exibição apenas do board de produto e produção quando refatorar rotina para cáculo de board agile
-         if (board.id ===76 || board.id ===78){
+         // In order: 76 produto, 78 producao, 81 P&D, 71 UX
+         if (board.id ===76 || board.id ===78 || board.id ===81 || board.id===71){
             $(boardMenu).append('<a href="#" id="' + board.id + '" class="list-group-item">' + board.location.name + ': ' + board.name + '</a>');
          }
     });
@@ -49,7 +52,7 @@ function listJiraBoards()
 
 function queryJiraInfo(boardId, fn)
 {
-	showMsg('Fetching Sprint data on Jira...');
+	showMsg('Fetching Sprint data on Jira...');    
 	$.ajax({
 		
        url: jiraHost + '/rest/agile/1.0/board/'+ boardId +'/sprint?state=active'
@@ -61,17 +64,15 @@ function queryJiraInfo(boardId, fn)
       showMsg('Getting issues data...');
       //const startTime = performance.now();
       $.ajax({
-        
         url: jiraHost + '/rest/agile/1.0/board/'+ boardId +'/sprint/'+ sprint.id +'/issue?expand=changelog&maxResults=10000'
       }).then(function(data){
-        //const duration1 = performance.now()-startTime;
-        //console.log(`Took ${duration1}`)
-        // Get all issues except user stories
-        //sprint.setIssues(data.issues.filter(function(issue){ return issue.fields.issuetype.description.indexOf('user story') == -1;}));
-        sprint.setIssues(data.issues);
-        //const duration2 = performance.now()-startTime;
-        //console.log(`Took2 ${duration2}`)
-
+         //const duration1 = performance.now()-startTime;
+         //console.log(`Took ${duration1}`)
+         // Get all issues except user stories
+         //sprint.setIssues(data.issues.filter(function(issue){ return issue.fields.issuetype.description.indexOf('user story') == -1;}));
+         sprint.setIssues(data.issues);
+         //const duration2 = performance.now()-startTime;
+         //console.log(`Took2 ${duration2}`)
         fn();
       });
 

@@ -38,16 +38,28 @@ Date.prototype.formatDate = function() {
 	return String( mm + "\/" + dd + "\/" + yyyy);
 };
 
-function Sprint(id, name, startDate, endDate)
+function Sprint(id, name, startDate, endDate, originBoardId)
 {
 	this.id = id;
 	this.name = name;
 	this.startDate = startDate;
 	this.endDate = endDate;
+	this.originBoardId = originBoardId;
 	this.nonWorkingDays;
+
+	// TODO Remove before
+	effortField = null;
+	// Produto e Produção
+	if(originBoardId===76 ||originBoardId===78){     
+		effortField = effortFieldScrum;
+	}
+	// P&D e UX
+	if(originBoardId===71 ||originBoardId===81){       
+		effortField = effortFieldSimple;
+	 }
 	
 	this.issues = new Array();
-	
+
 	this.setIssues = function(issues)
 	{
 		this.issues = issues;
@@ -69,7 +81,6 @@ function Sprint(id, name, startDate, endDate)
 		var dateArray = new Array();
 		var currentDate = this.startDate;
 		currentDate.setHours(0, 0, 0, 0);
-
 		while (currentDate <= this.endDate) 
 		{
 			if(isAnWorkingDay(currentDate, this.nonWorkingDays))
@@ -77,7 +88,6 @@ function Sprint(id, name, startDate, endDate)
 
 			currentDate = currentDate.addDays(1);
 		}
-
 		return dateArray;
 	};
 	
@@ -130,7 +140,8 @@ function Sprint(id, name, startDate, endDate)
 			  data.fields.subtasks.forEach(function(data){
 				subtaskKey = data.key;
 				subtaskFinishedOn = getSubTaskFinishedOn(issuesAll,subtaskKey);
-				if( typeof subtaskFinishedOn !== "undefined"){
+
+				if( typeof subtaskFinishedOn !== "undefined"){				
 					totalSubtaskDone = totalSubtaskDone + 1;
 					subtaskPoint = totalPointPerSubtask * 1;
 					let subtask = new Object();
@@ -140,7 +151,7 @@ function Sprint(id, name, startDate, endDate)
 				}
 			  });
 		});
-		finishedIssues = sumPointPerDay(issuesDateAndPoint);
+		finishedIssues = sumPointPerDay(issuesDateAndPoint, startDate);
 
 		if(finishedIssues.length > 0)
 		{
@@ -216,12 +227,12 @@ function Sprint(id, name, startDate, endDate)
 function extractSprintData(data)
 {
 	var activeSprint = data.values[0];
-	
 	var sprint = new Sprint(
 					activeSprint.id,
 					activeSprint.name,
 					buildDate(activeSprint.startDate),
-					buildDate(activeSprint.endDate));
+					buildDate(activeSprint.endDate),
+					activeSprint.originBoardId);
 
 	sprint.nonWorkingDays = getNonWorkingDays(activeSprint.originBoardId);
 
@@ -289,13 +300,17 @@ function getSubTaskFinishedOn(data, subtask){
 	if (subTaskIssuesSprint.length>0){
 		subTaskFinishedOn = subTaskIssuesSprint[0].finishedOn;
 	} 
+					
 	return subTaskFinishedOn
 }
 
-function sumPointPerDay(data) {
+function sumPointPerDay(data, startDate) {
 
-	var resultado = [];
-  
+	let result = [];
+	let pointFirstDay = 0;
+	let outherDaysSprint = [];
+	let effortPoint = [];
+
 	data.reduce(function(novo, item) {
 	  if (!novo[item.finishedOn]) {
 		novo[item.finishedOn] = {
@@ -303,15 +318,27 @@ function sumPointPerDay(data) {
 		  finishedOn: item.finishedOn
 		};
   
-		resultado.push(novo[item.finishedOn]);
+		result.push(novo[item.finishedOn]);
 	  }
   
 	  novo[item.finishedOn].ponto += item.ponto;
   
 	  return novo;
 	}, {});
+
+	pointFirstDay = result.filter((data)=>{
+      return data.finishedOn <= startDate
+	}).reduce(function (pontos, item){
+		return pontos += item.ponto;
+	},0);
+
+	otherDaysSprint = result.filter((data)=>{
+      return data.finishedOn > startDate
+	});
 	
-	return resultado;
+	effortPoint = [{ponto: pointFirstDay, finishedOn: startDate},...otherDaysSprint];
+
+	return effortPoint;
   }
 
   function today(){
