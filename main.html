@@ -1,35 +1,44 @@
-<!doctype html>
+<!DOCTYPE html>
 <html>
   <head>
     <title>Jira Sprint Burndown</title>
     <style type="text/css">
-      body
-		  {
+      body {
         margin: 10px;
         white-space: nowrap;
-				min-width: 640px;
-				min-height: 480px;
+        min-width: 640px;
+        min-height: 480px;
       }
-      #chart-container
-			{
-				width: 100%;
-				height: 100%;
-				position: absolute;
-				text-align: center;
-			}
+      #chart-container {
+        width: 100%;
+        height: 100%;
+        position: absolute;
+        text-align: center;
+      }
     </style>
-		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
-		<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
-		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
-		<script src="https://code.highcharts.com/highcharts.js"></script>
-		<script src="https://code.highcharts.com/modules/exporting.js"></script>
-		<script src="util.js"></script>
+    <link
+      rel="stylesheet"
+      href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"
+      integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u"
+      crossorigin="anonymous"
+    />
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+    <script
+      src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"
+      integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa"
+      crossorigin="anonymous"
+    ></script>
+    <script src="https://code.highcharts.com/highcharts.js"></script>
+    <script src="https://code.highcharts.com/modules/exporting.js"></script>
+    <script src="https://code.highcharts.com/modules/offline-exporting.js"></script>
+    <script src="https://code.highcharts.com/modules/export-data.js"></script>
+    <script src="util.js"></script>
     <script src="main.js"></script>
   </head>
   <body>
-	<div id="board-menu" class="list-group">
-		<span class="list-group-item active">Please select a Scrum Board:</span>
-	</div>
-	<div id="chart-container"></div>
+    <div id="board-menu" class="list-group">
+      <span class="list-group-item active">Please select a Scrum Board:</span>
+    </div>
+    <div id="chart-container"></div>
   </body>
 </html>
