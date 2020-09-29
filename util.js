@@ -46,6 +46,7 @@ function Sprint(id, name, startDate, endDate, originBoardId)
 	this.endDate = endDate;
 	this.originBoardId = originBoardId;
 	this.nonWorkingDays;
+	this.nameTime = '';
 
 	// TODO Remove before
 	effortField = null;
@@ -63,7 +64,7 @@ function Sprint(id, name, startDate, endDate, originBoardId)
 	this.setIssues = function(issues)
 	{
 		this.issues = issues;
-
+		this.nameTime = this.issues[0].fields.project.name;
 		var finishedIssues = this.issues.filter(function(issue){return isIssueFinished(issue);});
 		
 		finishedIssues.forEach(function(issue){
@@ -247,6 +248,9 @@ function extractSprintData(data)
  */
 function getNonWorkingDays(boardId)
 {
+	if (boardId===45){
+		boardId = 78;
+	}
 	var nonWorkingDays = new Array();
 
 	$.ajax({

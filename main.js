@@ -6,6 +6,7 @@ var effortFieldSimple = 'customfield_10918';
 var boardMenu = '#board-menu';
 var chartContainer = '#chart-container';
 var finishedStatus = ['FINISHED', 'CLOSED', 'DONE', 'REJECT'];
+var boards;
 
 // Main
 var sprint = null;
@@ -19,7 +20,7 @@ function listJiraBoards() {
   $.ajax({
     url: jiraHost + '/rest/agile/1.0/board?type=scrum,simple',
   }).then(function (data) {
-    var boards = data.values.sort(function (boardA, boardB) {
+    this.boards = data.values.sort(function (boardA, boardB) {
       if (
         boardA.location.name.toUpperCase() < boardB.location.name.toUpperCase()
       )
@@ -31,14 +32,13 @@ function listJiraBoards() {
       return 0;
     });
 
-    boards.forEach(function (board) {
+    this.boards.forEach(function (board) {
       // TODO: Remover este workaround para exibição apenas do board de produto e produção quando refatorar rotina para cáculo de board agile
       // In order: 76 produto, 78 producao, 81 P&D, 71 UX
       if (
         board.id === 76 ||
         board.id === 78 ||
-        board.id === 81 ||
-        board.id === 71
+        board.id === 81
       ) {
         $(boardMenu).append(
           '<a href="#" id="' +
@@ -92,6 +92,7 @@ function queryJiraInfo(boardId, fn) {
 }
 
 function generateBurndownChart() {
+
   showMsg('Generating burndown chart...');
   $(chartContainer).highcharts({
     title: {
@@ -126,7 +127,7 @@ function generateBurndownChart() {
       },
     },
     subtitle: {
-      text: 'Burndown Chart',
+      text: 'Burndown Chart - Time - ' + sprint.nameTime,
       x: -10,
     },
     xAxis: {
